@@ -36,35 +36,36 @@ namespace Объединение_войск
 
         public Barracks()
         {
-            _partie1 = Create();
-            _partie2 = Create();
+            _partie1 = CreateFirstPartie();
+            _partie2 = CreateSecondPartie();
         }
 
         public void Work()
         {
             Console.WriteLine("Группы до объединения");
             ShowInfo(_partie1);
+            Console.WriteLine();
+
+            ShowInfo(_partie2);
+            Console.WriteLine();
+
+            UniteParties();
+
+            Console.WriteLine("Группы после объединения\n");
+            ShowInfo(_partie1);
 
             Console.WriteLine();
             ShowInfo(_partie2);
-
-            Console.WriteLine();
-            Console.WriteLine("Объединенная группа\n");
-            UniteParties();
 
         }
 
         private void UniteParties()
         {
-            var unitedPatie = _partie2.Where(soldier => soldier.Name.StartsWith("Б")).Union(_partie1);
-
-            foreach (Soldier soldier in unitedPatie)
-            {
-                Console.WriteLine(soldier.Name);
-            }
+            _partie2 = _partie1.Where(soldier => soldier.Name.StartsWith("Б")).Union(_partie2).ToList();
+            _partie1 = _partie1.Except(_partie2).ToList();
         }
 
-        private List<Soldier> Create()
+        private List<Soldier> CreateFirstPartie()
         {
             List<Soldier> soldiers = new List<Soldier>()
             {
@@ -73,6 +74,20 @@ namespace Объединение_войск
                 new Soldier("Белогоров"),
                 new Soldier("Коклюшкин"),
                 new Soldier("Топилин"),
+            };
+
+            return soldiers;
+        }
+
+        private List<Soldier> CreateSecondPartie()
+        {
+            List<Soldier> soldiers = new List<Soldier>()
+            {
+                new Soldier("Алексеев"),
+                new Soldier("Беляшов"),
+                new Soldier("Белов"),
+                new Soldier("Кошкин"),
+                new Soldier("Топников"),
             };
 
             return soldiers;
